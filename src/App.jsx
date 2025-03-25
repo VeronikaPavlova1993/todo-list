@@ -3,6 +3,7 @@ import { useState } from 'react';
 const styleWrap = {
  display: 'flex',
  flexWrap: 'wrap',
+ flexDirection: 'column',
  justifyContent: 'center',
  border: '2px solid rgb(22, 22, 22)',
  borderRadius: '5px',
@@ -42,31 +43,61 @@ const styleSubmit = {
  color: 'rgb(255, 255, 255)',
  backgroundColor: 'rgb(168, 182, 79)',
 };
+
+const ulStyle = {
+  maxWidth: '528px',
+  color:'rgb(255, 255, 255)',
+  fontWeight: '700',
+  fontSize:' 24px',
+  listStyleType: 'none'
+};
+
+
 function App() {
- const [task, setTask] = useState('');
+ const [tasks, setTasks] = useState([]);
+ const [todo, setTodo] = useState('');
+
+ function addTask() {
+  const task = {
+    id: Math.random(),
+    value: todo
+  }
+  let newTask = [task, ...tasks];
+  setTasks(newTask);
+  setTodo('');
+ };
 
  function handleChange(e) {
-  setTask(e.target.value);
+  setTodo(e.target.value);
  }
 
- return (
-  <main style={styleMain}>
-   <div style={styleWrap}>
-    <div style={{ marginTop: '15px' }}>
-     <input
-      style={styleInput}
-      type="text"
-      value={task}
-      placeholder="Название задачи"
-      onChange={handleChange}
-     />
-     <button type="submit" style={styleSubmit}>
-      Добавить
-     </button>
-    </div>
-   </div>
-  </main>
+ const taskTodoList = tasks.map((task) => { 
+  return <li task={task.id}>{task.value}</li>
+  }
  );
+
+  return (
+   <main style={styleMain}>
+    <div style={styleWrap}>
+     <div style={{ marginTop: '15px' }}>
+      <input
+       style={styleInput}
+       type="text"
+       value={todo}
+       placeholder="Название задачи"
+       onChange={handleChange}
+      />
+      <button type="submit" style={styleSubmit} onClick={()=> addTask()}>
+       Добавить
+      </button>
+     </div>
+     <ul style={ulStyle}>
+      {tasks.length === 0 ? <li>Заданий нет</li> : taskTodoList}
+     </ul>
+    </div>
+   </main>
+  );
+ 
 }
 
 export default App;
