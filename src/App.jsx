@@ -1,61 +1,65 @@
 import { useState } from 'react';
+import { DeleteIcon } from './icons/DeleteIcon';
 
 const styleWrap = {
- display: 'flex',
- flexWrap: 'wrap',
- flexDirection: 'column',
- justifyContent: 'center',
- border: '2px solid rgb(22, 22, 22)',
- borderRadius: '5px',
- width: '50vw',
- height: '80vh',
- backgroundColor: 'rgb(113, 112, 111)',
+ position: 'absolute',
+ left: '50%',
+ top: '50%',
+ width: '460px',
+ paddingTop: '100px',
+ textAlign: 'center',
+ transform: 'translate(-50%, -50%)',
+ backgroundColor: 'rgb(221, 163, 113)',
+ boxShadow: '0 2px 8px rgba(49, 49, 49, 0.1)',
 };
 
-const styleMain = {
- height: '100vh',
- display: 'flex',
- justifyContent: 'center',
- alignItems: 'center',
+const styleDiv = {
  backgroundColor: 'rgb(212, 209, 207)',
 };
 
+const styleН1 = {
+ margin: '12px 0',
+};
+
 const styleInput = {
- maxWidth: '370px',
- margin: '18px 0px 24px',
+ padding: '6px 4px',
+ width: '70%',
  outline: 'none',
- padding: '18px 14px',
- color: 'rgb(153, 153, 153)',
- backgroundColor: 'rgb(244, 244, 244)',
- border: '1px solid rgb(244, 244, 244)',
 };
 
 const styleSubmit = {
- maxWidth: '173px',
- padding: '19px 50px',
- borderRadius: '0px',
+ padding: '7px 14px',
+ backgroundColor: 'rgb(129, 127, 127)',
  border: 'none',
- fontSize: '16px',
- fontWeight: '500',
- transitionProperty: 'background-color, color, border-color',
- cursor: 'pointer',
- transitionDuration: '300ms',
+ borderRadius: '4px',
  color: 'rgb(255, 255, 255)',
- backgroundColor: 'rgb(168, 182, 79)',
+};
+
+const divUlList = {
+ height: '600px',
+ overflowY: 'auto',
 };
 
 const ulStyle = {
- maxWidth: '528px',
- color: 'rgb(255, 255, 255)',
- fontWeight: '700',
- fontSize: ' 24px',
+ padding: '15px',
  listStyleType: 'none',
 };
 
 const liStyle = {
  display: 'flex',
  justifyContent: ' space-between',
- maxWidth: '370px',
+ listStyle: 'none',
+ padding: '10px 5px',
+ backgroundColor: 'rgb(255, 255, 255)',
+ margin: '12px 0',
+ boxShadow: '0 2px 8px rgb(5, 5, 5)',
+ borderRadius: '3px',
+ transition: '0.4s',
+};
+
+const delButton = {
+ border: 'none',
+ backgroundColor: 'rgb(255, 255, 255)',
 };
 
 function App() {
@@ -72,52 +76,37 @@ function App() {
   setTodo('');
  }
 
+ function handleSubmit(e) {
+  e.preventDefault();
+ }
+
  function handleChange(e) {
   setTodo(e.target.value);
  }
 
  function handleDelete(id) {
-  const del = tasks.filter(e => e.id !== id);
+  const del = tasks.filter((e) => e.id !== id);
   setTasks(del);
  }
 
- function DeleteIcon() {
-  return (
-   <svg
-    width="18"
-    height="18"
-    viewBox="0 0 18 18"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-   >
-    <g clipPath="url(#clip0_35_21)">
-     <path
-      d="M12 6.75V14.25H6V6.75H12ZM10.875 2.25H7.125L6.375 3H3.75V4.5H14.25V3H11.625L10.875 2.25ZM13.5 5.25H4.5V14.25C4.5 15.075 5.175 15.75 6 15.75H12C12.825 15.75 13.5 15.075 13.5 14.25V5.25Z"
-      fill="#A8B64F"
-     />
-    </g>
-    <defs>
-     <clipPath id="clip0_35_21">
-      <rect width="18" height="18" fill="white" />
-     </clipPath>
-    </defs>
-   </svg>
-  );
- }
+ 
 
  const taskTodoList = tasks.map((task) => {
   return (
    <li task={task.id} style={liStyle}>
     <div>{task.value}</div>
-    <button  onClick={() => handleDelete(task.id)}>{DeleteIcon()}</button>
+    <button style={delButton} onClick={() => handleDelete(task.id)}>
+     {DeleteIcon()}
+    </button>
    </li>
   );
  });
 
  return (
-  <main style={styleMain}>
+  <div style={styleDiv}>
    <div style={styleWrap}>
-    <div style={{ marginTop: '15px' }}>
+    <h1 style={styleН1}>ToDo List</h1>
+    <form onSubmit={handleSubmit} style={{ margin: '12px 0' }}>
      <input
       style={styleInput}
       type="text"
@@ -128,12 +117,14 @@ function App() {
      <button type="submit" style={styleSubmit} onClick={() => addTask()}>
       Добавить
      </button>
+    </form>
+    <div style={divUlList}>
+     <ul style={ulStyle}>
+      {tasks.length === 0 ? <li>Заданий нет</li> : taskTodoList}
+     </ul>
     </div>
-    <ul style={ulStyle}>
-     {tasks.length === 0 ? <li>Заданий нет</li> : taskTodoList}
-    </ul>
    </div>
-  </main>
+  </div>
  );
 }
 
